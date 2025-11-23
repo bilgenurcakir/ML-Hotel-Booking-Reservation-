@@ -3,6 +3,7 @@ bu proje otel rezervasyon bilgilerini içeren bir veri setini kullanarak rezerva
 
 # nasıl çalışır?
 öncelikle veri setimizin içindeki modelleri yanlış etkilecek olan features'lar çıkarıldı(örneğin burada reservation_status hali hazırda iptal edilip edilmediği bilgisini içeriyordu)
+
 daha sonrasında featureslardan biri olan arrival_date_month satırını daha iyi kullanabilmek için numerical hale getirme ihtiyacı duyduk ve her ay için (ocak->1, şubat->2..) string ifadeyi sayısal karşılıklarını verdik.
 
 veri setindeki özelliklerin is_canceled(target) ile korelasyonlarını bulabilmek için kategorik verileri numeric verilere çevirdik(onehot encoding kullandık çünkü ordinal bir feature yok).

@@ -22,7 +22,7 @@ from datetime import datetime
 
 # kodun açıklamaları
 
-data= pd.read_csv("hotel_bookings_updated_2024.csv") #veri setini çekeriz.
+data= pd.read_csv("hotel_bookings_updated_2024.csv")<!-- veri setini çekeriz. -->
 
 
 #bu feature'lar tahminden sonra ortaya çıkan bilgileri içerdiğinden modelin doğru tahmin yapmasını engeller

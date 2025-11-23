@@ -22,10 +22,10 @@ from datetime import datetime
 
 # kodun açıklamaları
 
-data= pd.read_csv("hotel_bookings_updated_2024.csv")<font color="green"> Veri Setini çekeriz </font>
+data= pd.read_csv("hotel_bookings_updated_2024.csv")** Veri Setini çekeriz **
 
 
-#bu feature'lar tahminden sonra ortaya çıkan bilgileri içerdiğinden modelin doğru tahmin yapmasını engeller
+** bu feature'lar tahminden sonra ortaya çıkan bilgileri içerdiğinden modelin doğru tahmin yapmasını engeller**
 silinecekler=["reservation_status","reservation_status_date"]
 
 data=data.drop(columns=silinecekler)

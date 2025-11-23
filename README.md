@@ -30,15 +30,25 @@ en önemli 10 feature ekrana tablolaştırıldı ve en son konsola accuricy repo
 # kütüphaneler
 
 import pandas as pd
+
 import numpy as np
+
 import matplotlib.pyplot as plt
+
 from sklearn.model_selection import train_test_split
+
 from sklearn.metrics import accuracy_score, classification_report
+
 from sklearn.linear_model import LogisticRegression
+
 from sklearn.tree import DecisionTreeClassifier
+
 from sklearn.ensemble import RandomForestClassifier
+
 from sklearn.neighbors import KNeighborsClassifier
+
 from sklearn.svm import SVC
+
 from datetime import datetime
 
 

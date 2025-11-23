@@ -189,8 +189,11 @@ plt.show()
 
 ### son aşama, burada kod çalıştırılarak en yüksek doğruluğa sahip olan model RandomForest olarak seçildi,
 accuricy report bastırıldı.
+
 print("\n en yüksek doğruluğu veren model: Random Forest modelidir.")
+
 print("Accuracy (train)  %0.1f " % (accuracyrf * 100))
+
 print(classification_report(y_test, tahminrf))
 
 # model çıktısı
@@ -218,39 +221,67 @@ onehot sonrası kolon sayısı: 119390
 
 #korelasyonlar:
  lead_time ile target arası korelasyon:0.29312335576070536
+ 
  arrival_date_year ile target arası korelasyon:nan
+ 
  arrival_date_month ile target arası korelasyon:0.0005832006134483165
+ 
  arrival_date_week_number ile target arası korelasyon:0.0005000172975428105
+ 
  arrival_date_day_of_month ile target arası korelasyon:-0.0038576620217618644
+ 
  stays_in_weekend_nights ile target arası korelasyon:-0.001791078078260647
+ 
  stays_in_week_nights ile target arası korelasyon:0.024764629045871265
+ 
  adults ile target arası korelasyon:0.060017212839559804
+ 
  children ile target arası korelasyon:0.0050477900292686196
+ 
  babies ile target arası korelasyon:-0.03249108920833171
+ 
  is_repeated_guest ile target arası korelasyon:-0.08479341835708092
+ 
  previous_cancellations ile target arası korelasyon:0.11013280822282377
+ 
  previous_bookings_not_canceled ile target arası korelasyon:-0.057357723165940115
+ 
  booking_changes ile target arası korelasyon:-0.1443809910613153
+ 
  agent ile target arası korelasyon:-0.08311415905369401
+ 
  company ile target arası korelasyon:-0.02064207062825651
+ 
  days_in_waiting_list ile target arası korelasyon:0.05418582411777437
+ 
  adr ile target arası korelasyon:0.047556597880384174
+ 
  required_car_parking_spaces ile target arası korelasyon:-0.1954978174944898
+ 
  total_of_special_requests ile target arası korelasyon:-0.2346577739690115
 
 #data.info()
 RangeIndex: 119390 entries, 0 to 119389
+
 Columns: 275 entries, is_canceled to country_ZWE
+
 dtypes: bool(259), float64(4), int64(12)
+
 memory usage: 44.1 MB
+
 None
 
 #model sonuçları
  logistic regression doğruluk skoru:  0.8004858028310579
+ 
  decisition trees doğruluk skoru:  0.8426166345590083
+
 random forest doğruluk skoru: 0.8730211910545271
+
 KNN doğruluk skoru: 0.78478096993048
+
 svc doğruluk skoru: skor heaplanamadı çünkü bu yükseklikte bir veri için svr çok yavaş çalışmaktadır.
+
 
  en yüksek doğruluğu veren model: Random Forest modelidir.
  

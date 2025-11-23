@@ -20,10 +20,11 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from datetime import datetime
 
+
 # kodun açıklamaları
 
-data= pd.read_csv("hotel_bookings_updated_2024.csv")** Veri Setini çekeriz **
-
+### veri setini çekeriz
+data= pd.read_csv("hotel_bookings_updated_2024.csv") 
 
 ** bu feature'lar tahminden sonra ortaya çıkan bilgileri içerdiğinden modelin doğru tahmin yapmasını engeller**
 silinecekler=["reservation_status","reservation_status_date"]

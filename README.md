@@ -1,7 +1,7 @@
 # ML Hotel Booking Reservation 
 bu proje otel rezervasyon bilgilerini içeren bir veri setini kullanarak rezervasyon iptal etme olasılığını tahmin eden bir sınıflandırma projesidir.
 
-# ne yapar?
+# nasıl çalışır?
 öncelikle veri setimizin içindeki modelleri yanlış etkilecek olan features'lar çıkarıldı(örneğin burada reservation_status hali hazırda iptal edilip edilmesiği bilgisini içeriyordu)
 daha sonrasında featureslardan biri olan arrival_date_month satırını daha iyi kullanabilmek için numerical hale getirme ihtiyacı duyduk ve her ay için (ocak->1, şubat->2..) string ifadeyi sayısal karşılıklarını verdik.
 

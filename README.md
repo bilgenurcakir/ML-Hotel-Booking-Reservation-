@@ -64,7 +64,7 @@ silinecekler=["reservation_status","reservation_status_date"]
 
 data=data.drop(columns=silinecekler) #o satırları siler.
 
-### veri setinin ilk 5 satırını bastırır.
+###  veri setinin inceleyebilmek için veri setinin ilk 5 satırını bastırır.
 print(data.head())
 
 ### string ayları numeric hale getiririz. (ocak->1 subat->2 ...)
@@ -98,7 +98,7 @@ for c in numerical_columns:
 
 ### bu aşamada kodu çalıştırarak korelasyonlarını kontrol ettik, model için gereksiz/performansını düşürecek olan featuresları belirledik.
 
-### korelasyon sonrasında gereksiz görülen sütunlar
+### korelasyon sonrasında gereksiz görülen sütunlar, örneğin arrival_date_year tüm satırlarda 2024 değerindedir.
 gereksiz_sutunlar=[
     'arrival_date_year',
     'arrival_date_month',

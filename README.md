@@ -3,9 +3,9 @@ bu proje otel rezervasyon sistemindeki 119,390 adet kayıt ve 32 adet feature ku
 
 # Veri seti Bilgisi
 bu projede Kaggle'dan alınan hotel_bookings_updated_2024 isimli veri seti kullanılmıştır.
- toplam kayıt:119,390
- toplam feature:32
- hedef değişken: is_canceled (0 iptal edilmedi, 1 iptal edildi)
+toplam kayıt:119,390
+toplam feature:32
+hedef değişken: is_canceled (0 iptal edilmedi, 1 iptal edildi)
 
 
 # kütüphaneler

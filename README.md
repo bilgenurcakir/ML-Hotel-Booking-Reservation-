@@ -9,47 +9,100 @@ bu projede Kaggle'dan alınan hotel_bookings_updated_2024 isimli veri seti kulla
 
 
 # kütüphaneler
-
+```python
 import pandas as pd
-
 import numpy as np
-
 import matplotlib.pyplot as plt
-
 from sklearn.model_selection import train_test_split
-
 from sklearn.metrics import accuracy_score, classification_report
-
 from sklearn.linear_model import LogisticRegression
-
 from sklearn.tree import DecisionTreeClassifier
-
 from sklearn.ensemble import RandomForestClassifier
-
 from sklearn.neighbors import KNeighborsClassifier
-
 from sklearn.svm import SVC
-
 from datetime import datetime
-
 import seaborn as sns
-
+```
 
 
 # Veri Ön İşleme
 ## gereksiz sütunların kaldırılması
+```python
+data=pd.read_csv("hotel_bookings_updated_2024.csv")
+
+silinecekler=["reservation_status","reservation_status_date"]
+#bu sütunlar rezervasyon sonrası için değerler verdiğinden tahmini hatalı sonuçlandıracaktır.
+data=data.drop(columns=silinecekler)
+
+print(data.head()) #ilk 5 satırı ekrana bastırır
+```
 reservation_status ve reservation_status_date sütunları tahmini gösteren bilgileri içerdiği için modeli hatalı eğiteceğinden veri setine dahil edilmemiştir.
 
+
 ## Ay bilgisinin numerik hale getirilmesi
-model stringi doğrudan işleyemeyeceği için arrival_date_month'da yer alan kategorik değişkenler numerik hale getirildi (ocak->1 şubat->2 ...)
+```python
+data['arrival_date_month']=data['arrival_date_month'].apply(lambda x: datetime.strptime(x,'%B').month)
+```
+model stringi doğrudan işleyemeyeceği için arrival_date_month'da yer alan kategorik değişkenler numerik hale getirildi. (ocak->1 şubat->2 ...)
 
 ##  Diğer sütunların One Hot Encoding ile numerik hale getirilmesi
+```
+
+onehot_cols=[
+    "hotel",
+    "meal",
+    "market_segment",
+    "distribution_channel",
+    "reserved_room_type",
+    "assigned_room_type",
+    "deposit_type",
+    "customer_type",
+    "city",
+    "country",
+]# one hot encoder ile numerik yapmamız gereken sütunlar
+
+data=pd.get_dummies(data,columns=onehot_cols,drop_first=True) #onehot encoding
+print("onehot sonrası kolon sayısı:",len(data))
+print(data.head())
+```
 veri seti incelendiğinde içerisinde ordinal değişken görülmediğinden sadce one hot encoding ile kategorik değişkenler numerik hale getirildi.
 (label encoding kullanılmadı çünkü kategoriler arasında bir sıralama oluşmasını istemedik)
 
 ## Korelasyon analizi ile gereksiz sütunların çıkartılması
- korelasyon matrisinde target olan is_cancelled ile ilişkisi düşük olan sütunlar çıkartıldı.
- örneğin arrival_date_year sütununda tüm değerler 2024'tür.bu özellik modelin eğitimi için herhangi bir bilgi vermez.
+```
+numerical_columns = data.select_dtypes(include=np.number).columns
+
+full_corr_matrix = data[numerical_columns].corr()
+plt.figure(figsize=(25, 20))
+sns.heatmap(full_corr_matrix, annot=False, fmt=".2f", cmap='coolwarm')
+plt.title('Tüm Sayısal Özellikler Arası Korelasyon Matrisi (Heatmap)')
+plt.show() # tüm numerik özelliklerin arasındaki korelasyona ait heatmap
+
+
+corr_matrix = data[numerical_columns].corr()
+plt.figure(figsize=(10, 15))
+target_corr = corr_matrix['is_canceled'].sort_values(ascending=False).drop('is_canceled')
+target_corr.plot(kind='barh', color=sns.color_palette("coolwarm", len(target_corr)))
+plt.title('is_canceled ile Özelliklerin Korelasyonu (Isı Haritası Stili)')
+plt.xlabel('Korelasyon Değeri')
+plt.grid(axis='x', linestyle='--')
+plt.show() #sadece is_canceled ve numerik özellikler arası korelasyonun heatmap'i.
+
+for c in data:
+    if c!='is_canceled':
+         print( f" {c} ile target arası korelasyon:{data['is_canceled'].corr(data[c])}") # tüm numeric sütunlar için is_canceled (target) ile korelasyonuna bak.
+
+gereksiz_sutunlar=[
+    'arrival_date_year',
+    'arrival_date_month',
+    'arrival_date_week_number',
+    'arrival_date_day_of_month',
+    'stays_in_weekend_nights',
+]# korelasyon sonrasında gereksiz görülen sütunlar atılır.
+```
+sayısal özelliklerin arasındaki korelasyona ait heatmap incelendi, daha sonra target ile sayısal özellikler arası heatmap'incelendi ve aynı zamanda bu korelasyon değerleri consola bastırıldı.
+korelasyon matrisinde target olan is_cancelled ile ilişkisi düşük olan sütunlar çıkartıldı.
+örneğin arrival_date_year sütununda tüm değerler 2024'tür.bu özellik modelin eğitimi için herhangi bir bilgi vermez.
 
  ## Eksik değerlerin doldurulması
  eksik değerleri model işleyemeyeceği için her birini yerine 0 koyduk.

@@ -1,8 +1,8 @@
 # Otel Rezervasyon İptali Tahmin Modeli
-bu proje otel rezervasyon sistemindeki 119,390 adet kayıt ve 32 adet feature kullanarak muşterinin rezervasyonu iptal edip etmeyeceğini tahmin eden bir  ikili sınıflandırma problemidir.
+bu proje otel rezervasyon sistemindeki 119,390 adet kayıt ve 32 adet feature kullanarak muşterinin rezervasyonu iptal edip etmeyeceğini tahmin eden bir ikili sınıflandırma problemidir.
 
 # Veri seti Bilgisi
-bu projede Kaggle'dan alınan hotel_bookings_updated_2024 isimli veri seti kullanılmıştır.
+bu projede Kaggle'dan alınan hotel_bookings_updated_2024 isimli veri setini kullandım.
 
 toplam kayıt:119,390
 
@@ -39,14 +39,14 @@ data=data.drop(columns=silinecekler)
 
 print(data.head()) #ilk 5 satırı ekrana bastırır
 ```
-reservation_status ve reservation_status_date sütunları tahmini gösteren bilgileri içerdiği için modeli hatalı eğiteceğinden veri setine dahil edilmemiştir.
+reservation_status ve reservation_status_date sütunları tahmini gösteren bilgileri içerdiği için modeli hatalı eğiteceğinden veri setinden çıkarttım.
 
 
 ## Ay bilgisinin numerik hale getirilmesi
 ```python
 data['arrival_date_month']=data['arrival_date_month'].apply(lambda x: datetime.strptime(x,'%B').month)
 ```
-model stringi doğrudan işleyemeyeceği için arrival_date_month'da yer alan kategorik değişkenler numerik hale getirildi. (ocak->1 şubat->2 ...)
+model stringi doğrudan işleyemeyeceği için arrival_date_month'da yer alan kategorik değişkenleri numerik hale getirdim. (ocak->1 şubat->2 ...)
 
 ##  Diğer sütunların One Hot Encoding ile numerik hale getirilmesi
 ```python
@@ -68,8 +68,8 @@ data=pd.get_dummies(data,columns=onehot_cols,drop_first=True) #onehot encoding
 print("onehot sonrası kolon sayısı:",len(data))
 print(data.head())
 ```
-veri seti incelendiğinde içerisinde ordinal değişken görülmediğinden sadce one hot encoding ile kategorik değişkenler numerik hale getirildi.
-(label encoding kullanılmadı çünkü kategoriler arasında bir sıralama oluşmasını istemedik)
+veri seti incelendiğinde içerisinde ordinal değişken görülmediğinden sadece one hot encoding ile kategorik değişkenleri numerik hale getirdim.
+(label encoding kullanılmadı çünkü kategoriler arasında bir sıralama oluşmasını istemedim)
 
 ## Korelasyon analizi ile gereksiz sütunların çıkartılması
 ```python
@@ -104,9 +104,9 @@ gereksiz_sutunlar=[
 ]# korelasyon sonrasında gereksiz görülen sütunlar atılır.
 data=data.drop(columns=gereksiz_sutunlar)
 ```
-sayısal özelliklerin arasındaki korelasyona ait heatmap incelendi, daha sonra target ile sayısal özellikler arası heatmap'incelendi ve aynı zamanda bu korelasyon değerleri consola bastırıldı.
-korelasyon matrisinde target olan is_cancelled ile ilişkisi düşük olan sütunlar çıkartıldı.
-örneğin arrival_date_year sütununda tüm değerler 2024'tür.bu özellik modelin eğitimi için herhangi bir bilgi vermez.
+sayısal özelliklerin arasındaki korelasyona ait heatmap'i ve  target ile sayısal özellikler arası heatmap'i incelendim ve aynı zamanda consola bastırdığım korelasyon değerlerine baktım.
+korelasyon matrisinde target olan is_cancelled ile ilişkisi düşük sütunları veri setinden attım.
+örneğin arrival_date_year sütununda tüm değerler 2024'tü.bu özellik modelin eğitimi için herhangi bir bilgi vermiyor.
 
  ## Eksik değerlerin doldurulması
  ```python
@@ -126,7 +126,7 @@ print(data.info())
 Target olarak is_canceled sütunu seçildi, veri seti %80 eğitim %20 test olacak şekilde ayrıldı. consola veri setinin güncel bilgileri bastırıldı.
   
 # Kullanılan modeller ve sonuçları
-projenin amacı rezervasyon iptal edilecek/edilmeyecek tahmini için ikili sınıflandırma problemidir. sınıflandırma modelleri test edilmiştir.
+projenin amacı rezervasyon iptal edilecek/edilmeyecek tahmini için ikili sınıflandırma problemidir.Sırasıyla sınıflandırma modellerini test ettim. Bu modeller incelendiğinde en yüksek doğruluğu random forest ile yakaladım bu yüzden bu model ile devam ettim. 
 
 ## 1-) logistic regression
 
@@ -152,7 +152,7 @@ accuracy=accuracy_score(y_test,tahmin)
 print(" decisition trees doğruluk skoru: ",accuracy)
 ```
 decisition trees doğruluk skoru:  0.8426166345590083
-Bu model logistic regressona göre daha iyi sonıç verdi çünkü lineer olmayan ilişkileri de öğrenebilir ancak tek bir karar ağaı yapısı olduğundan overfitting'e yatkın. bu sebeple istenilen verim alınamadı.
+Bu model logistic regressona göre daha iyi sonıç verdi çünkü lineer olmayan ilişkileri de öğrenebilir ancak tek bir karar ağacı yapısı olduğundan overfitting'e yatkın. bu sebeple istenilen verim alınamadı.
 
 ## 3-)RandomForest
 ```python
@@ -175,7 +175,7 @@ accuracy=accuracy_score(y_test,tahmin)
 print("KNN doğruluk skoru:",accuracy)
 ```
 KNN doğruluk skoru: 0.78478096993048
-test edilen modeller arasında en düşük doğruluk oranı. KNN komşuluk temellidir,one hot encidong sonrasında veri 280 boyutuna geliyor bu da mesafe hesaplamasını KNN için zorlaştırıyor. Ayrıca veri seti boyutu çok fazla.
+test edilen modeller arasında en düşük doğruluk oranı. KNN komşuluk temellidir,one hot encoding sonrasında veri 280 boyutuna geliyor bu da mesafe hesaplamasını KNN için zorlaştırıyor. Ayrıca veri seti boyutu çok fazla.
 
 ## 5-)SVC
 ```python
@@ -194,6 +194,7 @@ acc= bilinmiyor
 bu kadar büyük bir veri seti boyutu için SVC kullanılamaz(çok uzun sürüyor).
 
 # modeller arasından en yüksek doğruluk değerine sahip model:RandomForest'tır.
+
 ```python
 print("\n en yüksek doğruluğu veren model: Random Forest modelidir.")
 print("Accuracy (train)  %0.1f " % (accuracyrf * 100))
@@ -214,7 +215,7 @@ plt.xlabel('Önem Derecesi')
 plt.grid(axis='x', linestyle='--')
 plt.show()
 ```
-modelin karar verirken en çok hangi değişkenlere dikkat ettiğini anlamak için görselleştirildi.
+modelin karar verirken en çok hangi değişkenlere dikkat ettiğini anlamak için görselleştirdim.
 
 
 #  Random Forest Model Çıktısı
@@ -233,9 +234,9 @@ weighted avg       0.87      0.87      0.87     23878
 
 Process finished with exit code 0
 ```
-çıktı incelendiğinde RandomForest birden fazla karar ağacı içerip  karmaşık ilişkileri yakalayabildiğinden F1 score ve accuricy yüksek çıkmıştır.
-iptal edenler  için model iptal etmeyenlere oranda biraz daha iyi çalışmaktadır bunun sebebi de iptal edildi durumu için daha fazla rezervasyon olmasıdır(15101 adet iptal edildi, 8777 adet iptal edilmedi)
-ayrca iptal durumu için modelin recall değeri 0.93 bu da modelin gerçek iptalleri kaçırmadığını ancak iptal edilememe durumunda 0.77 oranıyla iptal durumuna göre daha fazla gözden kaçırdığını göstermektedir.
+çıktı incelendiğinde RandomForest birden fazla karar ağacı içerip  karmaşık ilişkileri yakalayabildiğinden F1 score ve accuricy yüksek çıktı.
+iptal edenler  için model iptal etmeyenlere oranda biraz daha iyi çalışıyor bunun sebebi de iptal edildi durumu için daha fazla rezervasyon olmasıdır.( support = 15101 adet iptal edildi, 8777 adet iptal edilmedi)
+ayrca iptal durumu için modelin recall değeri 0.93 bu da modelin gerçek iptalleri kaçırmadığını ve iptal edilememe durumunda recall 0.77 oranıyla iptal durumuna göre daha fazla gözden kaçırıldığını göstermektedir.
 
 # Tablolar
 

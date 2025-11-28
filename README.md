@@ -246,3 +246,5 @@ ayrca iptal durumu için modelin recall değeri 0.93 bu da modelin gerçek iptal
 ![target arası korelasyon](en_onemli_10_ozellik.png)
 
 
+
+

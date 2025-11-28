@@ -1,5 +1,5 @@
 # ML Hotel Booking Reservation 
-bu proje otel rezervasyon bilgilerini içeren bir veri setini kullanarak rezervasyon iptal etme olasılığını tahmin eden bir sınıflandırma projesidir.
+bu proje otel rezervasyon bilgilerini içeren bir veri setini (32 adet features,119,390 adet giriş) kullanarak rezervasyon iptal etme olasılığını tahmin eden bir sınıflandırma projesidir.
 
 # nasıl çalışır?
 öncelikle veri setimizin içindeki modelleri yanlış etkilecek olan features'lar çıkarıldı(örneğin burada reservation_status hali hazırda iptal edilip edilmediği bilgisini içeriyordu)

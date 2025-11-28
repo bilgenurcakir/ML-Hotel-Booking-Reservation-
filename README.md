@@ -9,7 +9,7 @@ toplam kayıt:119,390
 toplam feature:32
 
 hedef değişken: is_canceled (0 iptal edilmedi, 1 iptal edildi)
-
+veri seti: https://www.kaggle.com/datasets/kundanbedmutha/hotel-booking-reservation
 
 # kütüphaneler
 ```python

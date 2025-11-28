@@ -7,30 +7,6 @@ bu projede Kaggle'dan alınan hotel_bookings_updated_2024 isimli veri seti kulla
  toplam feature:32
  hedef değişken: is_canceled (0 iptal edilmedi, 1 iptal edildi)
 
-# Veri Ön İşleme
-## gereksiz sütunların kaldırılması
-reservation_status ve reservation_status_date sütunları tahmini gösteren bilgileri içerdiği için modeli hatalı eğiteceğinden veri setine dahil edilmemiştir.
-
-## ay bilgisinin numerik hale getirilmesi
-model stringi doğrudan işleyemeyeceği için arrival_date_month'da yer alan kategorik değişkenler numerik hale getirildi (ocak->1 şubat->2 ...)
-
-## One Hot Encoding ile numerik hale getirilmesi
-veri seti incelendiğinde içerisinde ordinal değişken görülmediğinden sadce one hot encoding ile kategorik değişkenler numerik hale getirildi.
-(label encoding kullanılmadı çünkü kategoriler arasında bir sıralama oluşmasını istemedik)
-
-## korelasyon analizi ile gereksiz sütunların çıkartılması
- korelasyon matrisinde target olan is_cancelled ile ilişkisi düşük olan sütunlar çıkartıldı.
- örneğin arrival_date_year sütununda tüm değerler 2024'tür.bu özellik modelin eğitimi için herhangi bir bilgi vermez.
-
- ## eksik değerlerin doldurulması
- eksik değerleri model işleyemeyeceği için her birini yerine 0 koyduk.
-
- ## train test split
-  veri seti %80 eğitim %20 test olacak şekilde ayrıldı.
-  
-
-
-
 
 # kütüphaneler
 
@@ -56,90 +32,45 @@ from sklearn.svm import SVC
 
 from datetime import datetime
 
-
-# kodun açıklamaları
-
-### veri setini çekeriz
-
-data= pd.read_csv("hotel_bookings_updated_2024.csv") 
-
-### bu feature'lar tahminden sonra ortaya çıkan bilgileri içerdiğinden modelin doğru tahmin yapmasını engeller
-
-silinecekler=["reservation_status","reservation_status_date"]
-
-data=data.drop(columns=silinecekler) #o satırları siler.
-
-###  veri setinin inceleyebilmek için veri setinin ilk 5 satırını bastırır.
-print(data.head())
-
-### string ayları numeric hale getiririz. (ocak->1 subat->2 ...)
-data["arrival_date_month"]=data["arrival_date_month"].apply(lambda x: datetime.strptime(x,'%B').month)
-
-### onehot encoder ile numerik yapılası gereken catagorical featuresları seçeriz.
-onehot_cols=["hotel",
-    "meal",
-    "market_segment",
-    "distribution_channel",
-    "reserved_room_type",
-    "assigned_room_type",
-    "deposit_type",
-    "customer_type",
-    "city",
-    "country",
-] 
-
-### onehot encoder
-data=pd.get_dummies(data,columns=onehot_cols,drop_first=True) 
-
-print("onehot sonrası kolon sayısı:",len(data))
-print(data.head())
-
-### numeric sütunları seçeriz
-numerical_columns=data.select_dtypes(include=np.number).columns 
-for c in numerical_columns:
-    if c!='is_canceled':
-         print( f" {c} ile target arası korelasyon:{data['is_canceled'].corr(data[c])}") 
-         # tüm numeric sütunlar için is_canceled (target) ile korelasyonuna bak.
-
-### bu aşamada kodu çalıştırarak korelasyonlarını kontrol ettik, model için gereksiz/performansını düşürecek olan featuresları belirledik.
-
-### korelasyon sonrasında gereksiz görülen sütunlar, örneğin arrival_date_year tüm satırlarda 2024 değerindedir.
-gereksiz_sutunlar=[
-    'arrival_date_year',
-    'arrival_date_month',
-    'arrival_date_week_number',
-    'arrival_date_day_of_month',
-    'stays_in_weekend_nights',
-]
+import seaborn as sns
 
 
-data=data.drop(columns=gereksiz_sutunlar) #gereksiz sutünları attık.
 
-### geriye kalan sütunlarda nan değerlerini 0 ile dolduralım
-data = data.fillna(0)
+# Veri Ön İşleme
+## gereksiz sütunların kaldırılması
+reservation_status ve reservation_status_date sütunları tahmini gösteren bilgileri içerdiği için modeli hatalı eğiteceğinden veri setine dahil edilmemiştir.
 
-### girdi ve çıktı
-x=data.drop('is_canceled',axis=1) # target haricindeki sutünlar
-y=data['is_canceled'] # target
+## Ay bilgisinin numerik hale getirilmesi
+model stringi doğrudan işleyemeyeceği için arrival_date_month'da yer alan kategorik değişkenler numerik hale getirildi (ocak->1 şubat->2 ...)
 
-### test ve train olarak veri setini ayırdık
-x_train ,x_test, y_train,y_test= train_test_split(x,y,test_size=0.2,random_state=True)
+##  Diğer sütunların One Hot Encoding ile numerik hale getirilmesi
+veri seti incelendiğinde içerisinde ordinal değişken görülmediğinden sadce one hot encoding ile kategorik değişkenler numerik hale getirildi.
+(label encoding kullanılmadı çünkü kategoriler arasında bir sıralama oluşmasını istemedik)
 
-print(data.info())
+## Korelasyon analizi ile gereksiz sütunların çıkartılması
+ korelasyon matrisinde target olan is_cancelled ile ilişkisi düşük olan sütunlar çıkartıldı.
+ örneğin arrival_date_year sütununda tüm değerler 2024'tür.bu özellik modelin eğitimi için herhangi bir bilgi vermez.
 
-### modeller
+ ## Eksik değerlerin doldurulması
+ eksik değerleri model işleyemeyeceği için her birini yerine 0 koyduk.
+
+ ## Train test split
+  veri seti %80 eğitim %20 test olacak şekilde ayrıldı.
+  
+## Kullanılan modeller ve sonuçları
 
 #### 1-) logistic regression
-
+```python
 logmodel=LogisticRegression()
 logmodel.fit(x_train,y_train)
 tahmin=logmodel.predict(x_test)
 
 accuracy=accuracy_score(y_test,tahmin)
 print(" logistic regression doğruluk skoru: ",accuracy)
-
+```
 
 #### 2-) DecisionTree
+```python
 dtmodel=DecisionTreeClassifier()
 dtmodel.fit(x_train,y_train)
 tahmin=dtmodel.predict(x_test)
@@ -147,26 +78,29 @@ tahmin=dtmodel.predict(x_test)
 accuracy=accuracy_score(y_test,tahmin)
 
 print(" decisition trees doğruluk skoru: ",accuracy)
-
+```
 #### 3-)RandomForest
+```python
 rfmodel=RandomForestClassifier()
 rfmodel.fit(x_train,y_train)
 tahminrf=rfmodel.predict(x_test)
 
 accuracyrf=accuracy_score(y_test,tahminrf)
 print("random forest doğruluk skoru:",accuracyrf)
-
+```
 #### 4-)KNN
+```python
 knnmodel=KNeighborsClassifier()
 knnmodel.fit(x_train,y_train)
 tahmin=knnmodel.predict(x_test)
 
 accuracy=accuracy_score(y_test,tahmin)
 print("KNN doğruluk skoru:",accuracy)
-
+```
 '''
 #### 5-)SVC
-##### bu boyutta bir veri için svc kullanılmaz (veri seti çok büyük).
+```python
+#bu boyutta bir veri için svc kullanılmaz (veri seti çok büyük).
 aşırı yavaş olduğu için kullanmadım.
 
 svcmodel=SVC(random_state=42)
@@ -175,9 +109,8 @@ tahmin=svcmodel.predict(x_test)
 
 accuracy=accuracy_score(y_test,tahmin)
 print("svc doğruluk skoru:",accuracy)
-'''
 print("svc doğruluk skoru: skor heaplanamadı çünkü bu yükseklikte bir veri için svr çok yavaş çalışmaktadır.")
-
+```
 ### en etkili 10 özellik ekrana tablolaştırılır.
 feature_importance = pd.Series(
     rfmodel.feature_importances_,

@@ -23,10 +23,15 @@ en önemli 10 feature ekrana tablolaştırıldı ve en son konsola accuricy repo
 
 # neden Random Forest modelini seçtim?
 öncelikle veri seyimiz sınıflandırmaya uygun iptal edildi/edilmedi değerini sorgulayan bir veri setiydi. bu yüzden sınıflandırma modellerini tek tek denedim. 
+
 logistic regression: veri sti bu model için fazla karmaşık geldi. düşük doğruluk değeri aldık. acc=0.80
+
 decision tree: tek bir karar ağacı var acc=0.84 lineere göre daha iyi bir sonuç verdi ancak Random Forest kadar başarılı değil.
+
 KNN: en düşük değeri verdi çünkü knn komşulara bakarak çalışıyor veri  seti fazla büyük bunun için. acc=78
+
 SVC: veri seti fazla büyük olduğundan hsaplama çok uzun sürdü bu yuzden acc değerini bulamadım.
+
 Random Forest: birden fazla karar ağacıyla çalışır karmaşık ilişkileri en doğru yakalaan model oldu. acc:0.87
 
 

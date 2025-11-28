@@ -26,7 +26,7 @@ en önemli 10 feature ekrana tablolaştırıldı ve en son konsola accuricy repo
 
 logistic regression: veri sti bu model için fazla karmaşık geldi. düşük doğruluk değeri aldık. acc=0.80
 
-decision tree: tek bir karar ağacı var acc=0.84 lineere göre daha iyi bir sonuç verdi ancak Random Forest kadar başarılı değil.
+decision tree: tek bir karar ağacı var acc=0.84 logistic'e göre daha iyi bir sonuç verdi ancak Random Forest kadar başarılı değil.
 
 KNN: en düşük değeri verdi çünkü knn komşulara bakarak çalışıyor veri  seti fazla büyük bunun için. acc=78
 

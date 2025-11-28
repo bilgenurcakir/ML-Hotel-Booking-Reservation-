@@ -1,38 +1,34 @@
-# ML Hotel Booking Reservation 
-bu proje otel rezervasyon bilgilerini içeren bir veri setini (32 adet features,119,390 adet giriş) kullanarak rezervasyon iptal etme olasılığını tahmin eden bir sınıflandırma projesidir.
+# Otel Rezervasyon İptali Tahmin Modeli
+bu proje otel rezervasyon sistemindeki 119,390 adet kayıt ve 32 adet feature kullanarak muşterinin rezervasyonu iptal edip etmeyeceğini tahmin eden bir  ikili sınıflandırma problemidir.
 
-# nasıl çalışır?
-öncelikle veri setimizin içindeki modelleri yanlış etkilecek olan features'lar çıkarıldı(örneğin burada reservation_status hali hazırda iptal edilip edilmediği bilgisini içeriyordu)
+# Veri seti Bilgisi
+bu projede Kaggle'dan alınan hotel_bookings_updated_2024 isimli veri seti kullanılmıştır.
+ toplam kayıt:119,390
+ toplam feature:32
+ hedef değişken: is_canceled (0 iptal edilmedi, 1 iptal edildi)
 
-daha sonrasında featureslardan biri olan arrival_date_month satırını daha iyi kullanabilmek için numerical hale getirme ihtiyacı duyduk ve her ay için (ocak->1, şubat->2..) string ifadeyi sayısal karşılıklarını verdik.
+# Veri Ön İşleme
+## gereksiz sütunların kaldırılması
+reservation_status ve reservation_status_date sütunları tahmini gösteren bilgileri içerdiği için modeli hatalı eğiteceğinden veri setine dahil edilmemiştir.
 
-veri setindeki özelliklerin is_canceled(target) ile korelasyonlarını bulabilmek için kategorik verileri numeric verilere çevirdik(onehot encoding kullandık çünkü ordinal bir feature yok).
+## ay bilgisinin numerik hale getirilmesi
+model stringi doğrudan işleyemeyeceği için arrival_date_month'da yer alan kategorik değişkenler numerik hale getirildi (ocak->1 şubat->2 ...)
 
-numeric sütunları seçerek bu sütunlar üzerinde her biri için target ile korelasyon hesabı yaptık.
-bu hesaplamada korelasyonu düşük olan ve modelin performansını düşürecek olan sütunları belirledik ve bu sütunları drop ile veri setinden attık.
+## One Hot Encoding ile numerik hale getirilmesi
+veri seti incelendiğinde içerisinde ordinal değişken görülmediğinden sadce one hot encoding ile kategorik değişkenler numerik hale getirildi.
+(label encoding kullanılmadı çünkü kategoriler arasında bir sıralama oluşmasını istemedik)
 
-data içerisindeki Nan değerleri 0 ile doldurduk.
+## korelasyon analizi ile gereksiz sütunların çıkartılması
+ korelasyon matrisinde target olan is_cancelled ile ilişkisi düşük olan sütunlar çıkartıldı.
+ örneğin arrival_date_year sütununda tüm değerler 2024'tür.bu özellik modelin eğitimi için herhangi bir bilgi vermez.
 
-girdi ve çıktımızı belirledik ve veri setimizi test ve train olarak böldük.
+ ## eksik değerlerin doldurulması
+ eksik değerleri model işleyemeyeceği için her birini yerine 0 koyduk.
 
-teker teker sınıflandırma için kullanabileceğimiz modelleri denedik( Logistic regression, decisionTree, RandomForest, SVC,KNN)
-bu modellerden SVC bu büyüklükte bir veri seti için çok uzun sürdüğünden eledik.
-geriye kalanlardan da en başarılısı RandomForest oldu(acc=87)
+ ## train test split
+  veri seti %80 eğitim %20 test olacak şekilde ayrıldı.
+  
 
-en önemli 10 feature ekrana tablolaştırıldı ve en son konsola accuricy report bastırıldı.
-
-# neden Random Forest modelini seçtim?
-öncelikle veri seyimiz sınıflandırmaya uygun iptal edildi/edilmedi değerini sorgulayan bir veri setiydi. bu yüzden sınıflandırma modellerini tek tek denedim. 
-
-logistic regression: veri sti bu model için fazla karmaşık geldi. düşük doğruluk değeri aldık. acc=0.80
-
-decision tree: tek bir karar ağacı var acc=0.84 logistic'e göre daha iyi bir sonuç verdi ancak Random Forest kadar başarılı değil.
-
-KNN: en düşük değeri verdi çünkü knn komşulara bakarak çalışıyor veri  seti fazla büyük bunun için. acc=78
-
-SVC: veri seti fazla büyük olduğundan hsaplama çok uzun sürdü bu yuzden acc değerini bulamadım.
-
-Random Forest: birden fazla karar ağacıyla çalışır karmaşık ilişkileri en doğru yakalaan model oldu. acc:0.87
 
 
 

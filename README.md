@@ -46,7 +46,7 @@ data['arrival_date_month']=data['arrival_date_month'].apply(lambda x: datetime.s
 model stringi doğrudan işleyemeyeceği için arrival_date_month'da yer alan kategorik değişkenler numerik hale getirildi. (ocak->1 şubat->2 ...)
 
 ##  Diğer sütunların One Hot Encoding ile numerik hale getirilmesi
-```
+```python
 
 onehot_cols=[
     "hotel",
@@ -69,7 +69,7 @@ veri seti incelendiğinde içerisinde ordinal değişken görülmediğinden sadc
 (label encoding kullanılmadı çünkü kategoriler arasında bir sıralama oluşmasını istemedik)
 
 ## Korelasyon analizi ile gereksiz sütunların çıkartılması
-```
+```python
 numerical_columns = data.select_dtypes(include=np.number).columns
 
 full_corr_matrix = data[numerical_columns].corr()
@@ -99,16 +99,28 @@ gereksiz_sutunlar=[
     'arrival_date_day_of_month',
     'stays_in_weekend_nights',
 ]# korelasyon sonrasında gereksiz görülen sütunlar atılır.
+data=data.drop(columns=gereksiz_sutunlar)
 ```
 sayısal özelliklerin arasındaki korelasyona ait heatmap incelendi, daha sonra target ile sayısal özellikler arası heatmap'incelendi ve aynı zamanda bu korelasyon değerleri consola bastırıldı.
 korelasyon matrisinde target olan is_cancelled ile ilişkisi düşük olan sütunlar çıkartıldı.
 örneğin arrival_date_year sütununda tüm değerler 2024'tür.bu özellik modelin eğitimi için herhangi bir bilgi vermez.
 
  ## Eksik değerlerin doldurulması
- eksik değerleri model işleyemeyeceği için her birini yerine 0 koyduk.
+ ```python
+data = data.fillna(0)
+ ```
+ eksik değerleri model işleyemeyeceği için her birinin yerine 0 koyduk.
 
- ## Train test split
-  veri seti %80 eğitim %20 test olacak şekilde ayrıldı.
+ ##  Girdi ve Çıktı belirlenmesi & Train test split
+  ```python
+
+x=data.drop('is_canceled' ,axis=1)
+y=data['is_canceled']
+
+x_train ,x_test, y_train,y_test= train_test_split(x,y,test_size=0.2,random_state=True)
+print(data.info())
+  ```
+Target olarak is_canceled sütunu seçildi, veri seti %80 eğitim %20 test olacak şekilde ayrıldı. consola veri setinin güncel bilgileri bastırıldı.
   
 ## Kullanılan modeller ve sonuçları
 
@@ -164,6 +176,7 @@ accuracy=accuracy_score(y_test,tahmin)
 print("svc doğruluk skoru:",accuracy)
 print("svc doğruluk skoru: skor heaplanamadı çünkü bu yükseklikte bir veri için svr çok yavaş çalışmaktadır.")
 ```
+
 ### en etkili 10 özellik ekrana tablolaştırılır.
 feature_importance = pd.Series(
     rfmodel.feature_importances_,

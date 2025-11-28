@@ -237,12 +237,12 @@ ayrca iptal durumu için modelin recall değeri 0.93 bu da modelin gerçek iptal
 # Tablolar
 
 ## sayısal özellikler arası korelasyon heatmap'i
-![sayısal özellikler arası korelasyon](images/sayısal_arası_korelasyon.png)
+![sayısal özellikler arası korelasyon](sayısal_arası_korelasyon.png)
 
 ## target ile sayısal özellikler arası korelasyon heatmap'i
-![target arası korelasyon](images/target_arası_korelasyon.png)
+![target arası korelasyon](target_arası_korelasyon.png)
 
 ## en önemli 10 özellik tablosu
-![target arası korelasyon](images/en_onemli_10_ozellik.png)
+![target arası korelasyon](en_onemli_10_ozellik.png)
 
 
